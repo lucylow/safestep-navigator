@@ -1,782 +1,954 @@
 # SafeStep AR – Navigate Home Without Fear
 
+[![Hackathon](https://img.shields.io/badge/75HER%20Hackathon-2026-ff69b4)](https://75her2026.devpost.com)
+[![React Native](https://img.shields.io/badge/React%20Native-Expo-61DAFB)](https://expo.dev)
+[![ViroReact](https://img.shields.io/badge/AR-ViroReact-00D4AA)](https://viro-community.readme.io/)
+[![Polygon](https://img.shields.io/badge/Blockchain-Polygon-8247E5)](https://polygon.technology)
+[![License](https://img.shields.io/badge/License-MIT-blue)](LICENSE)
+
+**Navigate home without fear.** SafeStep AR is a mobile safety navigation app that helps women and gender‑diverse individuals find the safest route home using AR wayfinding, AI-powered risk assessment, and blockchain-verified community rewards.
+
 **AI-powered AR companion using Goose to find safest routes + Safe Passage NFT rewards**
 
 *Built for women and gender-diverse people walking home alone at night from transit.*
 
-**Version 1.0 – March 2026**
-
----
-
-## 🏆 75HER Judging Criteria — All Met
-
-| Criterion | Status | Evidence |
-|-----------|--------|----------|
-| **Clarity 25/25** | ✅ | Problem card on Home + observable success test screen with PASS/FAIL |
-| **Proof 25/25** | ✅ | Clean start ( mode) + Data Sources screen + [EVIDENCE_LOG.md](./EVIDENCE_LOG.md) |
-| **Usability 20/20** | ✅ | 3-line pitch + WCAG-friendly contrast + accessible AR labels + 48px touch targets |
-| **Rigor 20/20** | ✅ | [DECISION_LOG.md](./DECISION_LOG.md) + [RISKLOG.md](./RISKLOG.md) + tradeoffs documented |
-| **Polish 10/10** | ✅ | Tidy repo + no broken links +  fallback + dark theme for night use |
-
-## 🎯 Judge Demo Script (3 minutes)
-
-1. Open app → **Home** shows Problem Frame + "Clarity ✓" badge
-2. Click **"Find Safe Route with Goose"** → Watch AI Analysis animation
-3. **Route Preview** → See safety-coded map, Trusted Points, weather context
-4. **Start AR Safe Route** → Walk through 5 green waypoints
-5. **Success Screen** → See PASSED with exact metrics matching success test
-6. **Data Sources** → Click live evidence links
-7. **Profile** → View journey history + SDG Impact cards
-
-## Judges Proof Checklist ✓
-- [x] **Clean Start**: `VITE_USE_MOCK=true` ensures demo always works
-- [x] **Evidence Linked**: Data Sources screen → live URLs + EVIDENCE_LOG.md
-- [x] **Decision Rigor**: DECISION_LOG.md with 8 entries + tradeoffs
-- [x] **Risk Management**: RISKLOG.md with 8 risks identified and mitigated
-
-## Rigor Documentation
-- [Decision Log](./DECISION_LOG.md) — 8 key architectural choices with tradeoffs
-- [Risk Log](./RISKLOG.md) — 8 risks identified, all mitigated
-- [Evidence Log](./EVIDENCE_LOG.md) — 5 cited sources with methodology
-- [Ethics](./ETHICS.md) — Privacy and bias considerations
-
 ---
 
 ## 📚 Table of Contents
-1. [Project Overview](#project-overview)
-2. [Technology Stack](#technology-stack)
-3. [System Architecture](#system-architecture)
-4. [Frontend Architecture](#frontend-architecture)
-5. [Backend Architecture](#backend-architecture)
-6. [Data Models](#data-models)
-7. [API Reference](#api-reference)
-8. [Blockchain Integration](#blockchain-integration)
-9. [Goose AI Integration](#goose-ai-integration)
-10. [Authentication & Security](#authentication--security)
-11. [Deployment Guide](#deployment-guide)
-12. [Testing Strategy](#testing-strategy)
-13. [Performance Considerations](#performance-considerations)
-14. [Future Enhancements](#future-enhancements)
-15. [Contributing](#contributing)
-16. [License](#license)
+
+1. [Project Overview](#-project-overview)
+2. [Features](#-features)
+3. [Technology Stack](#-technology-stack)
+4. [System Architecture](#-system-architecture)
+5. [Component Architecture](#-component-architecture)
+6. [Data Flow & State Management](#-data-flow--state-management)
+7. [AR Navigation Implementation](#-ar-navigation-implementation)
+8. [Blockchain Integration](#-blockchain-integration)
+9. [Backend Communication](#-backend-communication)
+10. [Mock Data & Testing](#-mock-data--testing)
+11. [Installation & Setup](#-installation--setup)
+12. [Running on Device](#-running-on-device)
+13. [Environment Variables](#-environment-variables)
+14. [Project Documentation](#-project-documentation)
+15. [Troubleshooting](#-troubleshooting)
+16. [Contributing](#-contributing)
+17. [License](#-license)
 
 ---
 
-## 1. Project Overview
+## 🌟 Project Overview
 
-SafeStep AR is a decentralized safety platform that helps women and gender‑diverse individuals navigate the “last mile” home safely. The web application provides a desktop interface to explore the ecosystem, view  routes, manage NFTs, participate in DAO governance, and browse community reports. It serves as both a marketing tool and a functional dashboard, complementing the mobile AR experience.
+### The Problem
+Women and gender‑diverse individuals face disproportionate fear and risk during nighttime commutes, especially the "last mile" from public transit to home. Generic navigation apps prioritize speed over safety, often directing users through poorly lit, isolated, or high‑crime areas.
 
-**Key Features:**
-- Interactive map preview with color‑coded safe routes.
-- NFT gallery displaying Soulbound tokens earned from completed journeys.
-- DAO governance interface to view and vote on proposals.
-- Community safety reports with staking and voting simulation.
-- Wallet connection (simulated for demo) to view user‑specific data.
+### Our Solution
+SafeStep AR combines three powerful technologies:
 
----
+- **AR Navigation** – Color‑coded 3D markers overlaid on the real world guide users along the safest path.
+- **Goose AI** – Intelligent backend analysis of lighting data, crime statistics, and community reports.
+- **Blockchain Rewards** – Soulbound NFTs minted after each safe journey, creating verifiable records of safe passage.
 
-## 2. Technology Stack
+### 4‑Line Problem Frame
 
-| Layer          | Technology                                                                 |
-|----------------|----------------------------------------------------------------------------|
-| **Frontend**   | React 18, TypeScript, Vite, TailwindCSS, Headless UI, Heroicons           |
-| **Maps**       | Leaflet + react-leaflet                                                    |
-| **State**      | React Context API + Hooks                                                   |
-| **Routing**    | React Router v6                                                            |
-| **Backend**    | Flask 2.3, Python 3.11                                                     |
-| **Database**   | PostgreSQL (Replit managed)                                                |
-| **Blockchain** | Web3.py, ethers.js                                                 
-| **AI**         | Goose (Block's open‑source agentic AI) – simulated                        |
-| **Storage**    | Replit Object Storage (Google Cloud Storage)                               |
-| **Hosting**    | Replit (backend) + Vercel / Netlify (frontend)                            |
+> **👤 User:** A woman or gender‑diverse individual commuting alone via public transit late at night.
+>
+> **❗ Problem:** Generic navigation apps prioritize speed over safety, directing users through poorly lit, isolated, or high‑crime areas, causing anxiety and physical risk during the "last mile" home.
+>
+> **🔒 Constraint:** The solution must work instantly (no download friction), respect privacy (no location tracking storage), and function reliably in low‑light, low‑network conditions.
+>
+> **✅ Success Test:** A user leaving a subway station at 10 PM can open the app, see a color‑coded safe route overlaid on the real world via their phone camera, and successfully navigate home without entering any high‑risk zones (red‑marked areas), completing the journey in under 15 minutes.
 
 ---
 
-## 3. System Architecture
+## ✨ Features
 
-The following diagram illustrates the high‑level architecture of the SafeStep web application and its interactions with external services.
+| Feature | Description | Status |
+|---------|-------------|--------|
+| **AR Navigation** | ViroReact-powered AR scene with color‑coded waypoints | ✅ Implemented |
+| **Route Preview** | Map view showing safe route before AR mode | ✅ Implemented |
+| **NFT Minting** | Soulbound NFT minting after journey completion | ✅ Mocked |
+| **NFT Gallery** | View collected Safe Passage NFTs | ✅ Mocked |
+| **Community Reports** | Submit staked safety reports with photos | ✅ Mocked |
+| **DAO Governance** | View and vote on safety parameter proposals | ✅ Mocked |
+| **Wallet Connection** | Simulated wallet connection for blockchain features | ✅ Implemented |
+| **Location Services** | GPS-based location detection for routing | ✅ Implemented |
+| **Haptic Feedback** | Tactile feedback for waypoint arrival | ✅ Implemented |
+| **Accessibility** | Screen reader support, high contrast, large touch targets | ✅ Implemented |
+
+---
+
+## 🛠️ Technology Stack
+
+### Frontend (Mobile)
+
+| Technology | Version | Purpose |
+|------------|---------|---------|
+| React Native | 0.81.4 | Cross‑platform mobile framework |
+| Expo | 54.0.0 | Development and build toolchain |
+| TypeScript | 5.8.2 | Type-safe JavaScript |
+| ViroReact | 2.49.0 | AR/VR rendering engine |
+| react-native-maps | 1.15.4 | Map preview component |
+| react-navigation | 7.x | Navigation and routing |
+| expo-location | 18.0.9 | GPS location services |
+| expo-camera | 16.1.0 | Camera access for AR and reports |
+| expo-haptics | 14.0.1 | Tactile feedback |
+| expo-speech | 13.0.1 | Voice guidance (optional) |
+| axios | 1.8.4 | HTTP client for API calls |
+| ethers | 5.7.2 | Blockchain interactions (mocked) |
+
+### Backend (Flask – separate repository)
+
+| Technology | Version | Purpose |
+|------------|---------|---------|
+| Flask | 2.3.3 | REST API framework |
+| PostgreSQL | 15.x | Relational database |
+| SQLAlchemy | 3.0.5 | ORM |
+| Web3.py | 6.15.1 | Blockchain interactions |
+| Goose | Latest | AI route analysis |
+
+### Blockchain (Polygon Testnet)
+
+| Contract | Address | Purpose |
+|----------|---------|---------|
+| SafePassageNFT | 0x... | Soulbound NFTs for journeys |
+| StakedReports | 0x... | Community reporting with staking |
+| RouteGovernor | 0x... | DAO governance for safety parameters |
+
+---
+
+## 🏗️ System Architecture
+
+### High-Level Architecture
 
 ```mermaid
 graph TB
-    subgraph "Client Browser"
-        A[React SPA]
+    subgraph "Mobile Device"
+        A[React Native App<br/>Expo + ViroReact]
     end
 
-    subgraph "Backend Services (Replit)"
-        B[Flask API]
+    subgraph "Replit Cloud"
+        B[Flask Backend]
         C[(PostgreSQL)]
         D[Object Storage]
-        E[Goose AI Simulator]
+        E[Goose AI]
     end
 
-    subgraph "External Services"
-        F[Polygon Blockchain<br/>Testnet]
+    subgraph "Blockchain (Polygon)"
+        F[SafePassageNFT]
+        G[StakedReports]
+        H[RouteGovernor]
     end
 
     A <-->|HTTPS| B
     B <--> C
     B <--> D
     B <--> E
-    A -.->|web3| F
-    B -.->|web3| F
+    A -.->|Web3 (Mock)| F
+    A -.->|Web3 (Mock)| G
+    A -.->|Web3 (Mock)| H
 ```
 
-**Data Flow Description:**
-1. The React frontend communicates with the Flask API via REST calls.
-2. The API reads/writes data from PostgreSQL (users, journeys, reports, proposals).
-3. File uploads (report photos) are stored in Replit Object Storage.
-4. Route safety analysis is delegated to the Goose AI simulator (or mock).
-5. Blockchain interactions (minting, voting, staking) are handled by Web3 calls from the backend (or mock).
-
----
-
-## 4. Frontend Architecture
-
-The frontend is a single‑page application built with React and TypeScript. It follows a component‑based architecture with clear separation of concerns.
-
-### 4.1 Directory Structure
-
-```
-src/
-├── components/          # Reusable UI components
-│   ├── Navbar.tsx
-│   ├── Footer.tsx
-│   ├── MapPreview.tsx
-│   ├── NFTGallery.tsx
-│   ├── ProposalsList.tsx
-│   ├── ReportsList.tsx
-│   └── WalletConnect.tsx
-├── pages/               # Page-level components
-│   ├── Home.tsx
-│   ├── Map.tsx
-│   ├── NFTs.tsx
-│   ├── DAO.tsx
-│   ├── Reports.tsx
-│   └── Profile.tsx
-├── services/            # API clients and mock data
-│   ├── api.ts
-│   └── blockchainMock.ts
-├── hooks/               # Custom React hooks
-│   └── useWallet.ts
-├── types/               # TypeScript interfaces
-│   └── index.ts
-├── App.tsx              # Main app with routing
-└── main.tsx             # Entry point
-```
-
-### 4.2 Component Hierarchy
+### Component Hierarchy
 
 ```mermaid
 graph TD
-    App --> Router
-    Router --> Navbar
-    Router --> Pages
+    App[App.tsx<br/>Root Component]
     
-    Pages --> HomePage
-    Pages --> MapPage
-    Pages --> NFTPage
-    Pages --> DAOPage
-    Pages --> ReportsPage
-    Pages --> ProfilePage
-
-    MapPage --> MapPreview
-    NFTPage --> NFTGallery
-    DAOPage --> ProposalsList
-    ReportsPage --> ReportsList
-
-    Navbar --> WalletConnect
+    App --> Home[HomeScreen<br/>Route Input]
+    App --> AR[ARScreen<br/>AR Navigation]
+    App --> Profile[ProfileScreen<br/>User & NFTs]
+    
+    Home --> Location[useLocation Hook]
+    Home --> API[ApiClient Service]
+    Home --> Map[RouteMap<br/>Map Preview]
+    
+    AR --> Viro[ViroARSceneNavigator]
+    Viro --> Scene[ARNavigationScene<br/>AR Markers]
+    Scene --> Haptics[expo-haptics]
+    Scene --> Speech[expo-speech]
+    
+    AR --> Mint[MintButton<br/>NFT Minting]
+    Mint --> Blockchain[Blockchain Client]
+    
+    Profile --> Gallery[NFTGallery]
+    Gallery --> Blockchain
 ```
 
-### 4.3 State Management
-
-- **User wallet state:** Managed by a custom `useWallet` hook that stores the connected address and exposes connect/disconnect functions.
-- **API data:** Fetched on demand within each page using `useEffect` and stored in local component state. No global state manager (Redux) is used to keep the architecture simple.
-
-### 4.4 Key Components
-
-#### 4.4.1 MapPreview (`MapPreview.tsx`)
-- Uses `react-leaflet` to render an interactive map.
-- Displays a mock route with waypoints color‑coded by safety score (green/yellow/red).
-- Each waypoint has a popup with safety score and description.
-
-#### 4.4.2 NFTGallery (`NFTGallery.tsx`)
-- Fetches NFTs for the connected wallet using the mock blockchain client.
-- Displays each NFT as a card with image, name, description, and attributes.
-- Handles loading and empty states.
-
-#### 4.4.3 ProposalsList (`ProposalsList.tsx`)
-- Retrieves a list of DAO proposals from the mock API.
-- Shows proposal ID, description, vote counts, status, and voting deadline.
-- Status is color‑coded (active, succeeded, executed, etc.).
-
-#### 4.4.4 ReportsList (`ReportsList.tsx`)
-- Displays community safety reports with type, description, location, and vote counts.
-- Each report shows its current status (pending/valid/invalid).
-
-#### 4.4.5 WalletConnect (`WalletConnect.tsx`)
-- Provides a button to connect/disconnect a wallet.
-- For demo, it simulates a connection with a fixed address.
-- Displays truncated address and a dropdown menu with disconnect option.
-
-### 4.5 Routing
-
-React Router is configured in `App.tsx`:
-
-```tsx
-<BrowserRouter>
-  <Navbar />
-  <Routes>
-    <Route path="/" element={<Home />} />
-    <Route path="/map" element={<Map />} />
-    <Route path="/nfts" element={<NFTs />} />
-    <Route path="/dao" element={<DAO />} />
-    <Route path="/reports" element={<Reports />} />
-    <Route path="/profile" element={<Profile />} />
-  </Routes>
-  <Footer />
-</BrowserRouter>
-```
-
----
-
-## 5. Backend Architecture
-
-The backend is a Flask application organized into modular blueprints and services.
-
-### 5.1 Directory Structure
-
-```
-backend/
-├── main.py                 # App entry point
-├── config.py               # Configuration
-├── models.py               # SQLAlchemy models
-├── requirements.txt        # Dependencies
-├── routes/
-│   ├── api.py              # Main API routes
-│   └── admin.py            # Admin routes (optional)
-├── services/
-│   ├── goose.py             # Goose AI integration
-│   ├── blockchain.py        # Web3 interactions
-│   ├── storage.py           # Object storage
-│   └── mock_data.py         # Mock data for development
-└── utils/
-    └── helpers.py           # Utility functions
-```
-
-### 5.2 Request Flow
+### Data Flow Diagram
 
 ```mermaid
 sequenceDiagram
-    participant Client
-    participant Flask
-    participant Routes
-    participant Services
-    participant Database
-    participant External
+    participant User
+    participant App
+    participant Location
+    participant API
+    participant Backend
+    participant Blockchain
 
-    Client->>Flask: HTTP Request
-    Flask->>Routes: Route handler
-    Routes->>Services: Call service (e.g., goose.analyze)
-    Services->>External: (Optional) blockchain / AI call
-    Services->>Database: Query/Update
-    Database-->>Services: Data
-    Services-->>Routes: Result
-    Routes-->>Flask: JSON response
-    Flask-->>Client: HTTP Response
+    User->>App: Enter destination
+    App->>Location: Get current position
+    Location-->>App: Coordinates
+    App->>API: fetchSafeRoute(start, end)
+    API->>Backend: POST /api/safe-route
+    Backend->>Backend: Goose AI analysis
+    Backend-->>API: Route waypoints
+    API-->>App: Route data
+    App->>User: Show map preview
+    User->>App: Start AR navigation
+    App->>App: Render AR markers
+    User->>App: Arrive at destination
+    App->>User: Prompt to mint NFT
+    User->>App: Confirm mint
+    App->>Blockchain: Simulate minting
+    Blockchain-->>App: Transaction hash
+    App->>User: Success screen
 ```
 
-### 5.3 Configuration
-
-Configuration is managed via environment variables loaded from `.env` or Replit Secrets. Key variables include:
-
-- `DATABASE_URL` – PostgreSQL connection string.
-- `POLYGON_RPC_URL` – RPC endpoint for Polygon testnet.
-- `PRIVATE_KEY` – Backend wallet private key (for signing transactions).
-- `NFT_CONTRACT_ADDRESS`, `REPORTS_CONTRACT_ADDRESS`, `GOVERNOR_CONTRACT_ADDRESS` – deployed contract addresses.
-- `CORS_ORIGINS` – allowed origins for CORS.
-- `USE_MOCK` – if true, all services return mock data (no real blockchain/Goose calls).
-
-### 5.4 Database Models (SQLAlchemy)
-
-See Section 6 for detailed schema.
-
-### 5.5 Services
-
-#### 5.5.1 Goose AI (`goose.py`)
-- Calls the Goose CLI with a prompt to analyze route safety.
-- Parses the JSON output.
-- If `USE_MOCK=True`, returns a random mock route from `mock_data.py`.
-
-#### 5.5.2 Blockchain (`blockchain.py`)
-- Initializes Web3 connection and contract instances.
-- Provides methods: `mint_nft`, `submit_report`, `vote`, `create_proposal`, etc.
-- All methods handle both real (using private key) and mock modes.
-
-#### 5.5.3 Storage (`storage.py`)
-- Uses Google Cloud Storage client (Replit Object Storage) to upload files.
-- Returns public URL of uploaded file.
-
-#### 5.5.4 Mock Data (`mock_data.py`)
-- Contains static arrays for routes, NFTs, proposals, and reports used when `USE_MOCK=True`.
-
----
-
-## 6. Data Models
-
-The PostgreSQL database contains the following tables (simplified ER diagram).
+### Navigation Flow
 
 ```mermaid
-erDiagram
-    User ||--o{ Journey : makes
-    User ||--o{ Report : submits
-    Journey ||--o{ NFT : results_in
-
-    User {
-        int id PK
-        string wallet_address UK
-        timestamp created_at
-    }
-
-    Journey {
-        int id PK
-        int user_id FK
-        float start_lat
-        float start_lng
-        float end_lat
-        float end_lng
-        float safety_score
-        string route_hash UK
-        boolean nft_minted
-        string nft_token_id
-        timestamp created_at
-    }
-
-    Report {
-        int id PK
-        int user_id FK
-        string report_type
-        float latitude
-        float longitude
-        text description
-        string photo_url
-        string stake_amount
-        string status
-        int on_chain_id
-        timestamp created_at
-    }
-
-    Proposal {
-        int id PK
-        int proposal_id UK
-        text description
-        string proposer
-        string for_votes
-        string against_votes
-        int state
-        int voting_ends
-        timestamp created_at
-    }
+graph LR
+    A[Splash Screen] --> B[Home Screen]
+    B --> C[Route Preview]
+    C --> D[AR Navigation]
+    D --> E[Arrival Screen]
+    E --> F[NFT Minting]
+    F --> G[Profile Screen]
+    
+    B --> G
+    G --> H[NFT Gallery]
+    G --> I[Data Sources]
+    G --> J[Settings]
 ```
-
-**Notes:**
-- `wallet_address` is unique and used as the primary identifier for users.
-- `route_hash` is a keccak256 hash of the route waypoints (used for on‑chain verification).
-- `stake_amount` is stored as a string to preserve precision (wei values).
-- `proposal_id` is the on‑chain proposal ID (from the contract).
 
 ---
 
-## 7. API Reference
+## 📱 Component Architecture
 
-Base URL: `https://your-backend.replit.dev/api`
+### Directory Structure
 
-All endpoints return JSON. Error responses include `success: false` and an `error` message.
+```
+safestep-mobile/
+├── src/
+│   ├── components/              # Reusable UI components
+│   │   ├── ARNavigationView.tsx
+│   │   ├── ARNavigationScene.tsx
+│   │   ├── RouteMap.tsx
+│   │   ├── MintButton.tsx
+│   │   ├── EvidenceUpload.tsx
+│   │   ├── JourneySuccessScreen.tsx
+│   │   └── Button.tsx
+│   ├── screens/                  # Full-screen components
+│   │   ├── HomeScreen.tsx
+│   │   ├── ARScreen.tsx
+│   │   ├── ProfileScreen.tsx
+│   │   ├── NFTGalleryScreen.tsx
+│   │   ├── DataSourcesScreen.tsx
+│   │   └── SettingsScreen.tsx
+│   ├── services/                  # API and blockchain clients
+│   │   ├── api.ts                # Main API client
+│   │   ├── mockApi.ts            # Mock implementation
+│   │   ├── blockchain.ts         # Blockchain client
+│   │   ├── mockBlockchain.ts     # Mock blockchain
+│   │   └── types.ts              # TypeScript interfaces
+│   ├── hooks/                     # Custom React hooks
+│   │   ├── useLocation.ts
+│   │   ├── useWallet.ts
+│   │   ├── useScaledFontSize.ts
+│   │   └── useRouteData.ts
+│   ├── mocks/                     # Mock data
+│   │   ├── index.ts              # Main mock data
+│   │   └── blockchainMock.ts     # Blockchain mock data
+│   ├── theme/                     # Styling constants
+│   │   ├── colors.ts
+│   │   └── typography.ts
+│   ├── utils/                     # Helper functions
+│   │   ├── arHelpers.ts
+│   │   ├── locationHelpers.ts
+│   │   └── imageUtils.ts
+│   └── config/
+│       └── env.ts                # Environment variables
+├── assets/                        # Images, fonts, icons
+├── app.json                       # Expo configuration
+├── App.tsx                        # Root component
+├── package.json
+├── tsconfig.json
+└── README.md
+```
 
-### 7.1 Health Check
+---
 
-`GET /health`
+## 🔄 Data Flow & State Management
 
-Response:
-```json
-{
-  "status": "ok",
-  "message": "SafeStep AR backend running"
+### State Management Approach
+
+The app uses React's built‑in state management with Context API for global state, and component‑level state for local concerns.
+
+#### Global State (Context)
+
+```typescript
+// contexts/AppContext.tsx
+interface AppContextType {
+  walletAddress: string | null;
+  setWalletAddress: (address: string | null) => void;
+  userLocation: Coordinates | null;
+  setUserLocation: (location: Coordinates) => void;
+  currentRoute: SafeRoute | null;
+  setCurrentRoute: (route: SafeRoute) => void;
+}
+
+// Usage in components
+const { walletAddress, setWalletAddress } = useAppContext();
+```
+
+#### Local State (Component)
+
+```typescript
+// Example: HomeScreen.tsx
+const [destination, setDestination] = useState('');
+const [loading, setLoading] = useState(false);
+const [routeData, setRouteData] = useState<SafeRoute | null>(null);
+```
+
+#### API Data Flow
+
+```mermaid
+graph LR
+    A[Component] --> B[ApiClient]
+    B --> C{USE_MOCK?}
+    C -->|True| D[MockApiClient]
+    C -->|False| E[RealApiClient]
+    D --> F[Mock Data]
+    E --> G[Flask Backend]
+    F --> H[Component State]
+    G --> H
+```
+
+### Key State Interfaces
+
+```typescript
+// types/index.ts
+export interface Coordinates {
+  latitude: number;
+  longitude: number;
+}
+
+export interface Waypoint extends Coordinates {
+  safety: number;        // 1-10
+  order: number;
+  description?: string;
+}
+
+export interface SafeRoute {
+  id: string;
+  start: Coordinates;
+  end: Coordinates;
+  waypoints: Waypoint[];
+  safetyScore: number;
+  distance: number;
+  estimatedTime: number;
+}
+
+export interface User {
+  id: string;
+  walletAddress: string;
+  displayName?: string;
+  nfts: NFT[];
+}
+
+export interface NFT {
+  tokenId: string;
+  metadata: NFTMetadata;
+  transactionHash?: string;
 }
 ```
 
-### 7.2 Safe Route Analysis
+---
 
-`POST /safe-route`
+## 🎯 AR Navigation Implementation
 
-Request body:
-```json
-{
-  "start": { "lat": 40.7128, "lng": -74.0060 },
-  "end": { "lat": 40.7135, "lng": -74.0055 },
-  "userAddress": "0x742d35Cc6634C0532925a3b844Bc454e4438f44e"
+### AR Scene Overview
+
+The AR navigation is built using **ViroReact**, a React Native library that abstracts ARKit (iOS) and ARCore (Android).
+
+```mermaid
+graph TD
+    ARScreen[ARScreen] --> Navigator[ViroARSceneNavigator]
+    Navigator --> Scene[ARNavigationScene]
+    Scene --> Markers[Waypoint Markers]
+    Scene --> Tracking[Tracking Handler]
+    Scene --> Feedback[Haptic + Speech]
+    
+    Markers --> Green[Green Sphere<br/>Safety >= 8]
+    Markers --> Yellow[Yellow Sphere<br/>Safety 5-7]
+    Markers --> Red[Red Sphere<br/>Safety < 5]
+    
+    Tracking --> Normal[Tracking Normal]
+    Tracking --> Limited[Tracking Limited]
+    Tracking --> Lost[Tracking Lost]
+```
+
+### AR Scene Component
+
+```typescript
+// src/components/ARNavigationScene.tsx (simplified)
+import { ViroARScene, ViroSphere, ViroText, ViroMaterials } from '@viro-community/react-viro';
+
+ViroMaterials.createMaterials({
+  safe: { diffuseColor: '#9AE6B4', bloomThreshold: 0.8 },
+  caution: { diffuseColor: '#FBD38D', bloomThreshold: 0.8 },
+  danger: { diffuseColor: '#F56565', bloomThreshold: 0.8 },
+});
+
+const ARNavigationScene = ({ routeData, onArrival }) => {
+  const [currentIndex, setCurrentIndex] = useState(0);
+
+  const getMaterial = (safety: number) => {
+    if (safety >= 8) return 'safe';
+    if (safety >= 5) return 'caution';
+    return 'danger';
+  };
+
+  const getPosition = (index: number) => {
+    // Place waypoints in a path in front of user
+    return {
+      x: (index - routeData.length / 2) * 1.5,
+      y: 0,
+      z: -3 - index * 2,
+    };
+  };
+
+  return (
+    <ViroARScene onTrackingUpdated={handleTracking}>
+      {routeData.map((point, index) => (
+        <ViroSphere
+          key={index}
+          position={[getPosition(index).x, 0.5, getPosition(index).z]}
+          scale={[0.3, 0.3, 0.3]}
+          materials={[getMaterial(point.safety)]}
+          animation={{ name: 'pulse', run: true, loop: true }}
+        />
+      ))}
+    </ViroARScene>
+  );
+};
+```
+
+### GPS to AR Coordinate Conversion
+
+For the hackathon, we use a simplified fixed‑offset approach. In production, we would use `ViroGeolocation` for true GPS‑based AR.
+
+```typescript
+// utils/arHelpers.ts
+export const gpsToARPosition = (
+  waypoint: Waypoint,
+  userLocation: Coordinates,
+  index: number
+): { x: number; y: number; z: number } => {
+  // Simplified: place markers in a line relative to user
+  return {
+    x: (index - 5) * 1.5,
+    y: 0,
+    z: -3 - index * 2,
+  };
+};
+```
+
+---
+
+## ⛓️ Blockchain Integration
+
+### Blockchain Service Architecture
+
+```mermaid
+graph TD
+    A[Components] --> B[BlockchainClient]
+    B --> C{USE_MOCK?}
+    C -->|True| D[MockBlockchainClient]
+    C -->|False| E[RealBlockchainClient]
+    
+    D --> F[Mock Data]
+    E --> G[ethers.js]
+    G --> H[Polygon RPC]
+    
+    B --> I[NFT Functions]
+    B --> J[Report Functions]
+    B --> K[DAO Functions]
+    
+    I --> I1[mintNFT]
+    I --> I2[getNFTs]
+    I --> I3[balanceOf]
+    
+    J --> J1[submitReport]
+    J --> J2[voteOnReport]
+    J --> J3[getReports]
+    
+    K --> K1[createProposal]
+    K --> K2[voteOnProposal]
+    K --> K3[getProposals]
+```
+
+### Mock Blockchain Client
+
+```typescript
+// src/services/mockBlockchain.ts
+export class MockBlockchainClient {
+  async getNFTs(address: string): Promise<NFT[]> {
+    await delay(800);
+    return mockNFTs;
+  }
+
+  async mintNFT(address: string, routeHash: string, safetyScore: number): Promise<{
+    success: boolean;
+    tokenId: string;
+    txHash: string;
+  }> {
+    await delay(2000);
+    return {
+      success: true,
+      tokenId: Math.floor(Math.random() * 1000).toString(),
+      txHash: `0x${Math.random().toString(16).substring(2, 15)}`,
+    };
+  }
+
+  async getProposals(): Promise<Proposal[]> {
+    await delay(600);
+    return mockProposals;
+  }
+
+  async getReports(): Promise<Report[]> {
+    await delay(700);
+    return mockReports;
+  }
 }
 ```
 
-Response (success):
-```json
-{
-  "success": true,
-  "waypoints": [
-    { "lat": 40.7128, "lng": -74.0060, "safety": 9, "description": "Bus stop" },
-    ...
+### Smart Contract Interfaces
+
+```typescript
+// services/contracts.ts
+export const SafePassageNFT_ABI = [
+  "function mintSafePassage(address to, uint8 safetyScore, int256 startLat, int256 startLng, uint256 distance, bytes32 routeHash) public returns (uint256)",
+  "function balanceOf(address owner) view returns (uint256)",
+  "function tokenURI(uint256 tokenId) view returns (string)",
+  "function tokenOfOwnerByIndex(address owner, uint256 index) view returns (uint256)"
+];
+
+export const StakedReports_ABI = [
+  "function createReport(uint8 reportType, int256 lat, int256 lng, string memory description, string memory photoUrl) external returns (uint256)",
+  "function vote(uint256 reportId, bool support, uint256 stakeAmount) external",
+  "function resolveReport(uint256 reportId) external",
+  "function getReport(uint256 reportId) external view returns (...)"
+];
+
+export const RouteGovernor_ABI = [
+  "function propose(string memory description, uint256 newMinStake, uint256 newLightingWeight, uint256 newReportsWeight) external returns (uint256)",
+  "function vote(uint256 proposalId, bool support) external",
+  "function execute(uint256 proposalId) external",
+  "function proposals(uint256 proposalId) external view returns (...)"
+];
+```
+
+---
+
+## 🌐 Backend Communication
+
+### API Client Architecture
+
+```mermaid
+graph LR
+    A[Components] --> B[ApiClient]
+    B --> C{USE_MOCK?}
+    C -->|True| D[MockApiClient]
+    C -->|False| E[RealApiClient]
+    D --> F[Mock Data]
+    E --> G[Flask API]
+    G --> H[Backend Services]
+    G --> I[Database]
+    G --> J[Blockchain]
+```
+
+### API Client Implementation
+
+```typescript
+// src/services/api.ts
+import axios from 'axios';
+import Constants from 'expo-constants';
+
+const BACKEND_URL = Constants.expoConfig?.extra?.REPLIT_BACKEND_URL 
+  || process.env.EXPO_PUBLIC_REPLIT_BACKEND_URL 
+  || 'https://safestep-backend.replit.dev';
+
+const USE_MOCK = process.env.EXPO_PUBLIC_USE_MOCK === 'true' || __DEV__;
+
+class ApiClient {
+  private baseURL: string;
+
+  constructor() {
+    this.baseURL = BACKEND_URL;
+  }
+
+  async fetchSafeRoute(start: Coordinates, end: Coordinates): Promise<SafeRouteResponse> {
+    if (USE_MOCK) {
+      return this.mockFetchSafeRoute(start, end);
+    }
+    try {
+      const response = await axios.post(`${this.baseURL}/api/safe-route`, { start, end });
+      return response.data;
+    } catch (error) {
+      return { success: false, error: error.message };
+    }
+  }
+
+  private async mockFetchSafeRoute(start: Coordinates, end: Coordinates): Promise<SafeRouteResponse> {
+    await delay(1500);
+    return {
+      success: true,
+      path: mockRoute1.waypoints,
+      safety_score: mockRoute1.safetyScore,
+    };
+  }
+
+  async mintNFT(address: string, routeHash: string, safetyScore: number): Promise<MintResponse> {
+    if (USE_MOCK) {
+      await delay(2000);
+      return {
+        success: true,
+        transactionHash: `0x${Math.random().toString(16).substring(2, 15)}`,
+        tokenId: Math.floor(Math.random() * 1000).toString(),
+      };
+    }
+    // Real implementation
+    const response = await axios.post(`${this.baseURL}/api/mint`, {
+      address,
+      routeHash,
+      safetyScore,
+    });
+    return response.data;
+  }
+
+  // Other endpoints...
+}
+
+export default new ApiClient();
+```
+
+### Environment Variable Configuration
+
+```typescript
+// config/env.ts
+export const env = {
+  backendUrl: process.env.EXPO_PUBLIC_REPLIT_BACKEND_URL || '',
+  useMock: process.env.EXPO_PUBLIC_USE_MOCK === 'true',
+  apiKey: process.env.EXPO_PUBLIC_API_KEY || '',
+  polygonRpc: process.env.EXPO_PUBLIC_POLYGON_RPC || '',
+};
+```
+
+---
+
+## 📊 Mock Data & Testing
+
+### Mock Data Structure
+
+```typescript
+// src/mocks/index.ts
+export const mockRoute1: SafeRoute = {
+  id: 'route-001',
+  start: { latitude: 40.7128, longitude: -74.0060 },
+  end: { latitude: 40.7135, longitude: -74.0055 },
+  waypoints: [
+    { latitude: 40.7128, longitude: -74.0060, safety: 9, order: 0, description: 'Bus stop (well-lit)' },
+    { latitude: 40.7129, longitude: -74.0061, safety: 8, order: 1, description: 'Sidewalk with shops' },
+    { latitude: 40.7130, longitude: -74.0062, safety: 7, order: 2, description: 'Underpass – caution' },
+    { latitude: 40.7131, longitude: -74.0063, safety: 9, order: 3, description: 'Residential street' },
+    { latitude: 40.7132, longitude: -74.0064, safety: 8, order: 4, description: 'Home' },
   ],
-  "safety_score": 8.2
-}
-```
+  safetyScore: 8.2,
+  distance: 450,
+  estimatedTime: 6,
+};
 
-### 7.3 Get User Journeys / NFTs
-
-`GET /user/journeys?address=0x...`
-
-Response:
-```json
-[
+export const mockNFTs: NFT[] = [
   {
-    "id": 1,
-    "start": { "lat": 40.7128, "lng": -74.0060 },
-    "end": { "lat": 40.7135, "lng": -74.0055 },
-    "safetyScore": 8.2,
-    "nftMinted": true,
-    "tokenId": "101",
-    "date": "2026-03-01T22:21:00Z"
-  }
-]
+    tokenId: '101',
+    metadata: {
+      name: 'Safe Passage #101',
+      description: 'Safe nighttime journey on March 1, 2026',
+      image: 'https://via.placeholder.com/300/9AE6B4/FFFFFF?text=Safe+Passage+101',
+      attributes: [
+        { trait_type: 'Safety Score', value: 8.7 },
+        { trait_type: 'Distance (m)', value: 450 },
+        { trait_type: 'Time of Day', value: '22:15' },
+      ],
+    },
+    transactionHash: '0xabc123...',
+  },
+];
 ```
 
-### 7.4 Mint NFT
+### Testing Strategy
 
-`POST /mint`
-
-Request body:
-```json
-{
-  "address": "0x742d35Cc6634C0532925a3b844Bc454e4438f44e",
-  "safetyScore": 8,
-  "routeHash": "0x7c5e...3fa1"
-}
+```mermaid
+graph TD
+    A[Test Pyramid] --> B[Unit Tests]
+    A --> C[Integration Tests]
+    A --> D[E2E Tests]
+    
+    B --> B1[Jest + React Testing Library]
+    B --> B2[Component Tests]
+    B --> B3[Hook Tests]
+    
+    C --> C1[API Mock Tests]
+    C --> C2[Navigation Tests]
+    
+    D --> D1[Cypress / Detox]
+    D --> D2[User Flow Tests]
 ```
 
-Response:
-```json
-{
-  "success": true,
-  "transactionHash": "0xabc123def456...",
-  "tokenId": "123"
-}
-```
+### Running Tests
 
-### 7.5 Get Proposals
+```bash
+# Unit tests
+npm test
 
-`GET /proposals`
+# Watch mode
+npm test -- --watch
 
-Response:
-```json
-[
-  {
-    "id": 1,
-    "description": "Increase minimum stake to 10 MATIC",
-    "proposer": "0x742d...",
-    "forVotes": "12500000000000000000",
-    "againstVotes": "5000000000000000000",
-    "state": 1,
-    "votingEnds": 1719878400
-  }
-]
-```
-
-### 7.6 Get Reports
-
-`GET /reports`
-
-Response:
-```json
-[
-  {
-    "id": 1,
-    "reportType": 0,
-    "latitude": 40.7129,
-    "longitude": -74.0061,
-    "description": "Broken street light",
-    "photoUrl": "https://storage.googleapis.com/...",
-    "stakeAmount": "5000000000000000000",
-    "status": 1,
-    "yesVotes": "3000000000000000000",
-    "noVotes": "1000000000000000000"
-  }
-]
-```
-
-### 7.7 Create Report
-
-`POST /report`
-
-Request body (multipart/form-data with file):
-- `reportType` (int)
-- `latitude` (float)
-- `longitude` (float)
-- `description` (string)
-- `stakeAmount` (string, optional)
-- `photo` (file)
-
-Response:
-```json
-{
-  "success": true,
-  "id": 42
-}
-```
-
-### 7.8 Upload Photo (standalone)
-
-`POST /upload` (multipart/form-data with `file`)
-
-Response:
-```json
-{
-  "url": "https://storage.googleapis.com/..."
-}
-```
-
-### 7.9 Get Evidence Log
-
-`GET /evidence`
-
-Response:
-```json
-{
-  "content": "# Evidence Log...\n..."
-}
+# Coverage
+npm test -- --coverage
 ```
 
 ---
 
-## 8. Blockchain Integration
+## 📦 Installation & Setup
 
-### 8.1 Smart Contracts
+### Prerequisites
 
-The SafeStep ecosystem is powered by three core smart contracts deployed on Polygon Amoy testnet:
+- Node.js 18+
+- npm or yarn
+- Expo CLI
+- iOS Simulator (Mac) or Android Emulator
+- Physical device with Expo Go app
 
-| Contract | Address | Purpose |
-|----------|---------|---------|
-| `SafePassageNFT` | `0x...` | Soulbound NFTs for completed journeys |
-| `StakedReports` | `0x...` | Staking-based community reporting |
-| `RouteGovernor` | `0x...` | DAO governance for safety parameters |
+### Step 1: Clone Repository
 
-### 8.2 Web3 Integration
-
-The backend uses `web3.py` to interact with the blockchain. In mock mode, all transactions return dummy hashes.
-
-**Example minting flow (backend):**
-
-```python
-def mint_nft(to_address, safety_score, route_hash):
-    tx = nft_contract.functions.mintSafePassage(
-        to_address,
-        safety_score,
-        0, 0, 0,
-        Web3.keccak(text=route_hash)
-    ).build_transaction({
-        'from': backend_address,
-        'nonce': w3.eth.get_transaction_count(backend_address),
-        'gas': 200000,
-        'gasPrice': w3.eth.gas_price
-    })
-    signed_tx = w3.eth.account.sign_transaction(tx, private_key)
-    tx_hash = w3.eth.send_raw_transaction(signed_tx.rawTransaction)
-    return w3.to_hex(tx_hash)
+```bash
+git clone https://github.com/your-org/safestep-ar.git
+cd safestep-ar/mobile
 ```
 
-### 8.3 Mock Mode
+### Step 2: Install Dependencies
 
-For demonstration purposes, the backend can operate entirely with mock data by setting `USE_MOCK=true`. In this mode:
-- No blockchain calls are made.
-- All endpoints return plausible dummy data.
-- The frontend experiences identical behavior without requiring a live blockchain.
-
----
-
-## 9. Goose AI Integration
-
-Goose is Block's open‑source agentic AI framework. In SafeStep, it is used to analyze route safety by considering:
-
-- Street lighting density (from OpenStreetMap).
-- Recent crime reports (simulated).
-- Community‑verified reports (from on‑chain data).
-
-### 9.1 Goose Prompt Engineering
-
-The backend constructs a detailed prompt that instructs Goose to:
-
-1. Fetch lighting data for the given area.
-2. Query recent crime statistics (mock).
-3. Incorporate community reports.
-4. Return a JSON array of waypoints with safety scores and descriptions.
-
-**Example prompt:**
-
-```
-Find the safest walking route from {start} to {end} for a woman at night.
-Consider:
-- Street lighting density (use OSM)
-- Recent crime reports (use public API)
-- Community reports from on‑chain (if any)
-Output JSON with:
-- waypoints: list of {lat, lng, safety (1-10), description}
-- overall safety_score
+```bash
+npm install
+# or
+yarn install
 ```
 
-### 9.2 Goose Execution
+### Step 3: Configure Environment Variables
 
-The backend calls Goose as a subprocess and extracts JSON from the output. A fallback mechanism returns mock data if Goose fails or is unavailable.
+Create a `.env` file in the mobile directory:
 
-```python
-result = subprocess.run(['goose', 'run', prompt], capture_output=True, text=True)
-output = result.stdout
-# extract JSON and parse
+```bash
+# .env
+EXPO_PUBLIC_USE_MOCK=true
+EXPO_PUBLIC_REPLIT_BACKEND_URL=https://your-backend.replit.dev
+EXPO_PUBLIC_API_KEY=dev-api-key-2026
+EXPO_PUBLIC_POLYGON_RPC=https://rpc-amoy.polygon.technology
 ```
 
-### 9.3 Simulation Mode
+### Step 4: Start Development Server
 
-When `USE_MOCK=true`, the `analyze_route_safety` function returns a random mock route from a predefined set, allowing frontend development without Goose installed.
+```bash
+npx expo start
+```
 
----
+### Step 5: Run on Device
 
-## 10. Authentication & Security
-
-### 10.1 Authentication
-
-The web application does not implement traditional username/password authentication. Instead, users are identified by their blockchain wallet address. The frontend provides a “Connect Wallet” button that sets the address in the `useWallet` hook. All subsequent requests that require user context include the address as a query parameter or in the request body.
-
-### 10.2 Security Measures
-
-- **CORS:** Only allowed origins (configured via `CORS_ORIGINS`) can access the API.
-- **Environment Variables:** All sensitive keys (database URL, private key) are stored in Replit Secrets and never exposed in code.
-- **Input Validation:** All API endpoints validate required fields and data types.
-- **SQL Injection:** SQLAlchemy ORM prevents injection attacks.
-- **File Upload Safety:** Uploaded files are scanned for malware (via Google Cloud Storage) and stored with random names to prevent path traversal.
-- **Private Key Security:** The backend wallet's private key is used only for signing transactions; it never leaves the server.
-
-### 10.3 Privacy
-
-- No personal information (name, email) is collected.
-- Location data is stored only in aggregated form (journey start/end) and not tied to any identifier other than wallet address.
-- Photos uploaded for reports have EXIF data stripped before storage.
-- Users can delete their data by contacting support (GDPR compliance planned).
+- **iOS:** Scan QR code with Camera app → opens in Expo Go
+- **Android:** Scan QR code with Expo Go app
+- **Emulator:** Press `i` (iOS) or `a` (Android)
 
 ---
 
-## 11. Deployment Guide
+## 📱 Running on Device
 
-### 11.1 Prerequisites
+### iOS (Physical Device)
 
-- A Replit account (for backend).
-- A Vercel or Netlify account (for frontend).
-- Polygon testnet RPC URL (e.g., from Alchemy).
-- Deployed smart contracts (or use mock mode).
+1. Install **Expo Go** from App Store
+2. Scan QR code from terminal
+3. Allow camera and location permissions when prompted
 
-### 11.2 Backend Deployment on Replit
+### Android (Physical Device)
 
-1. Create a new Python Repl.
-2. Copy the backend code into the Repl.
-3. Set environment variables in Replit Secrets:
-   - `DATABASE_URL`
-   - `POLYGON_RPC_URL`
-   - `PRIVATE_KEY`
-   - `NFT_CONTRACT_ADDRESS`, etc.
-   - `CORS_ORIGINS` (include your frontend URL)
-4. Install dependencies: `pip install -r requirements.txt`
-5. Click **Run**.
-6. Note the public URL (e.g., `https://your-backend.your-username.replit.dev`).
+1. Install **Expo Go** from Google Play
+2. Scan QR code from terminal
+3. Allow camera and location permissions when prompted
 
-### 11.3 Frontend Deployment (Vercel)
+### Building for Production
 
-1. Push the frontend code to a GitHub repository.
-2. Import the project into Vercel.
-3. Set environment variables:
-   - `VITE_API_URL` = your backend URL.
-   - `VITE_USE_MOCK` = false (or true for mock-only).
-4. Deploy.
-5. The app will be available at a Vercel URL.
+```bash
+# Android APK
+eas build -p android --profile preview
 
-### 11.4 Connecting Frontend to Backend
+# iOS IPA (requires Apple Developer account)
+eas build -p ios --profile preview
+```
 
-The frontend uses the `api.ts` service to communicate with the backend. The base URL is read from `import.meta.env.VITE_API_URL`. All requests include the `X-API-Key` header (if configured).
+### AR Testing Requirements
+
+- **iOS:** iPhone 6s or newer with iOS 12+
+- **Android:** Device with ARCore support (Google Play Services for AR)
 
 ---
 
-## 12. Testing Strategy
+## 🔧 Environment Variables
 
-### 12.1 Unit Tests (Frontend)
+| Variable | Description | Default |
+|----------|-------------|---------|
+| `EXPO_PUBLIC_USE_MOCK` | Use mock data instead of real backend | `true` |
+| `EXPO_PUBLIC_REPLIT_BACKEND_URL` | URL of Flask backend | `https://safestep-backend.replit.dev` |
+| `EXPO_PUBLIC_API_KEY` | API key for backend authentication | `''` |
+| `EXPO_PUBLIC_POLYGON_RPC` | Polygon RPC URL | `https://rpc-amoy.polygon.technology` |
+| `EXPO_PUBLIC_ENVIRONMENT` | Development/Production environment | `development` |
 
-- Jest + React Testing Library.
-- Test key components: `MapPreview`, `NFTGallery`, `ProposalsList`.
-- Mock API calls using `jest.mock`.
-
-### 12.2 Unit Tests (Backend)
-
-- Pytest.
-- Test API endpoints with mocked services.
-- Test database models and relationships.
-
-### 12.3 Integration Tests
-
-- Test full flows: wallet connection → fetch NFTs → mint journey.
-- Use a local test database and mock blockchain.
-
-### 12.4 End-to-End Tests
-
-- Cypress (optional).
-- Simulate user interactions in the browser.
-
-### 12.5 Mock Data Testing
-
-All features can be tested in mock mode without any external dependencies. This is essential for CI/CD and development.
+**Important:** All environment variables must be prefixed with `EXPO_PUBLIC_` to be accessible in the Expo app.
 
 ---
 
-## 13. Performance Considerations
+## 📚 Project Documentation
 
-- **Lazy Loading:** Pages and components are code‑split using React.lazy.
-- **Image Optimization:** All images are optimized and served via CDN (Cloudinary/Imgix).
-- **Caching:** API responses are cached where appropriate (e.g., proposals list can be cached for 30 seconds).
-- **Database Indexes:** Indexes on `wallet_address`, `proposal_id`, and `created_at` for fast queries.
-- **Rate Limiting:** API endpoints have rate limiting (using Flask‑Limiter) to prevent abuse.
-- **CDN:** Static assets (frontend build) are served via Vercel's CDN.
+### Key Documents
 
----
+| Document | Location | Purpose |
+|----------|----------|---------|
+| **Evidence Log** | `/docs/EVIDENCE_LOG.md` | Cited sources for problem validation |
+| **Decision Log** | `/docs/DECISION_LOG.md` | Technical choices and tradeoffs |
+| **Risk Log** | `/docs/RISK_LOG.md` | Risks identified and mitigations |
+| **Ethics** | `/docs/ETHICS.md` | Privacy and bias mitigation strategies |
+| **API Reference** | `/docs/API_REFERENCE.md` | Backend endpoint documentation |
 
-## 14. Future Enhancements
+### Links to Logs
 
-- **Real Blockchain Integration:** Replace  client with live contract calls.
-- **User Profiles:** Allow users to set display names and avatars.
-- **Notifications:** Email/SMS alerts for voted proposals or report updates.
-- **Mobile Responsiveness:** Improve mobile layout for the web app.
-- **Multi‑language Support:** Internationalize UI for global reach.
-- **Analytics Dashboard:** Show aggregated safety trends and NFT statistics.
-- **Governance Forum:** Off‑chain discussion platform for proposals (e.g., Discourse).
+- [Evidence Log](./docs/EVIDENCE_LOG.md)
+- [Decision Log](./docs/DECISION_LOG.md)
+- [Risk Log](./docs/RISK_LOG.md)
+- [Ethics Statement](./docs/ETHICS.md)
 
 ---
 
-## 15. Contributing
+## 🐛 Troubleshooting
 
-We welcome contributions! Please see our [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
+### Common Issues and Solutions
 
-- Report issues on GitHub.
-- Submit pull requests with clear descriptions.
-- Follow the existing code style (Prettier + ESLint for frontend, Black for backend).
+#### 1. AR Scene Not Loading
+
+```
+Error: "ViroARSceneNavigator not found"
+```
+
+**Solution:** Ensure ViroReact is properly installed and linked. Run:
+```bash
+npx expo install @viro-community/react-viro
+npx expo run:android   # or run:ios
+```
+
+#### 2. Environment Variables Not Loading
+
+```
+Error: "Cannot read property 'REPLIT_BACKEND_URL' of undefined"
+```
+
+**Solution:**
+- Ensure variables are prefixed with `EXPO_PUBLIC_`
+- Restart Expo server with `npx expo start -c`
+- Check `.env` file is in project root
+
+#### 3. Mock Data Not Working
+
+```
+Error: "USE_MOCK is not defined"
+```
+
+**Solution:**
+- Set `EXPO_PUBLIC_USE_MOCK=true` in `.env`
+- Restart Expo server
+
+#### 4. Location Services Not Working
+
+```
+Error: "Location permission denied"
+```
+
+**Solution:**
+- Check device settings (Settings → Privacy → Location)
+- Reinstall app and grant permissions
+- For emulator: enable location services
+
+#### 5. Camera Permission Issues (AR)
+
+```
+Error: "Camera permission denied"
+```
+
+**Solution:**
+- For iOS: add `NSCameraUsageDescription` in `app.json`
+- For Android: add `android.permission.CAMERA` in `app.json`
 
 ---
 
-## 16. License
+## 🤝 Contributing
+
+We welcome contributions! Please follow these guidelines:
+
+### Branch Structure
+
+```
+main          # Production-ready code
+develop       # Integration branch
+feature/*     # New features
+bugfix/*      # Bug fixes
+```
+
+### Commit Convention
+
+```
+feat: Add NFT minting screen
+fix: Fix AR marker positioning
+docs: Update README
+style: Format code
+refactor: Simplify API client
+test: Add unit tests
+chore: Update dependencies
+```
+
+### Pull Request Process
+
+1. Fork the repository
+2. Create a feature branch
+3. Write tests for new features
+4. Ensure all tests pass
+5. Submit pull request to `develop` branch
+
+---
+
+## 📄 License
 
 This project is licensed under the MIT License – see the [LICENSE](LICENSE) file for details.
 
 ---
 
+## 🙏 Acknowledgments
+
+- **#75HER Challenge** – for the opportunity and guidance
+- **Block (Square)** – for Goose AI
+- **Replit** – for hosting and seamless deployment
+- **CreateHER Fest** – for the community and mentorship
+- **ViroReact** – for the AR framework
+- **Expo** – for the development toolchain
+
+---
+
 **Built with 💜 for the #75HER Challenge 2026**  
-[GitHub Repository](https://github.com/your-org/safestep-ar) | [Live Demo](https://safestep-ar.vercel.app) | [Devpost Submission](https://75her2026.devpost.com)
+[GitHub Repository](https://github.com/your-org/safestep-ar) | [Devpost Submission](https://75her2026.devpost.com) | [Live Demo](https://safestep-ar.vercel.app)
